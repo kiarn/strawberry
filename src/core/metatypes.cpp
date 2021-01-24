@@ -71,6 +71,7 @@
 #include "smartplaylists/playlistgenerator_fwd.h"
 
 #include "radios/radiochannel.h"
+#include "widgets/collapsibleinfopane.h"
 
 #ifdef HAVE_LIBMTP
 #  include "device/mtpconnection.h"
@@ -152,6 +153,8 @@ void RegisterMetaTypes() {
 
   qRegisterMetaType<RadioChannel>("RadioChannel");
   qRegisterMetaType<RadioChannelList>("RadioChannelList");
+
+  qRegisterMetaType<CollapsibleInfoPane::Data>("CollapsibleInfoPane::Data");
 
 #ifdef HAVE_LIBMTP
   qRegisterMetaType<MtpConnection*>("MtpConnection*");
