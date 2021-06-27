@@ -144,30 +144,24 @@ const QString Song::kColumnSpec = Song::kColumns.join(", ");
 const QString Song::kBindSpec = Utilities::Prepend(":", Song::kColumns).join(", ");
 const QString Song::kUpdateSpec = Utilities::Updateify(Song::kColumns).join(", ");
 
-// used to indicate, what columns can be filtered numerically. Used by the CollectionQuery.
-const QStringList Song::kNumericalColumns = QStringList() << "year"
-                                                          << "length"
-                                                          << "samplerate"
-                                                          << "bitdepth"
-                                                          << "bitrate"
-                                                          << "rating"
-                                                          << "playcount"
-                                                          << "skipcount";
+const QStringList Song::kTextSearchColumns = QStringList() << "title"
+                                                           << "album"
+                                                           << "artist"
+                                                           << "albumartist"
+                                                           << "composer"
+                                                           << "performer"
+                                                           << "grouping"
+                                                           << "genre"
+                                                           << "comment";
 
-
-const QStringList Song::kFtsColumns = QStringList() << "ftstitle"
-                                                    << "ftsalbum"
-                                                    << "ftsartist"
-                                                    << "ftsalbumartist"
-                                                    << "ftscomposer"
-                                                    << "ftsperformer"
-                                                    << "ftsgrouping"
-                                                    << "ftsgenre"
-                                                    << "ftscomment";
-
-const QString Song::kFtsColumnSpec = Song::kFtsColumns.join(", ");
-const QString Song::kFtsBindSpec = Utilities::Prepend(":", Song::kFtsColumns).join(", ");
-const QString Song::kFtsUpdateSpec = Utilities::Updateify(Song::kFtsColumns).join(", ");
+const QStringList Song::kNumericalSearchColumns = QStringList() << "year"
+                                                                << "length"
+                                                                << "samplerate"
+                                                                << "bitdepth"
+                                                                << "bitrate"
+                                                                << "rating"
+                                                                << "playcount"
+                                                                << "skipcount";
 
 const Song::RegularExpressionList Song::kAlbumDisc = Song::RegularExpressionList()
     << QRegularExpression("\\s+-*\\s*(Disc|CD)\\s*([0-9]{1,2})$", QRegularExpression::CaseInsensitiveOption)
@@ -1750,20 +1744,6 @@ void Song::BindToQuery(SqlQuery *query) const {
 
   query->BindDoubleOrNullValue(":ebur128_integrated_loudness_lufs", d->ebur128_integrated_loudness_lufs_);
   query->BindDoubleOrNullValue(":ebur128_loudness_range_lu", d->ebur128_loudness_range_lu_);
-
-}
-
-void Song::BindToFtsQuery(SqlQuery *query) const {
-
-  query->BindValue(":ftstitle", d->title_);
-  query->BindValue(":ftsalbum", d->album_);
-  query->BindValue(":ftsartist", d->artist_);
-  query->BindValue(":ftsalbumartist", d->albumartist_);
-  query->BindValue(":ftscomposer", d->composer_);
-  query->BindValue(":ftsperformer", d->performer_);
-  query->BindValue(":ftsgrouping", d->grouping_);
-  query->BindValue(":ftsgenre", d->genre_);
-  query->BindValue(":ftscomment", d->comment_);
 
 }
 

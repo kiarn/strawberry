@@ -39,8 +39,6 @@ class SimpleTreeModel : public QAbstractItemModel {
   QModelIndex parent(const QModelIndex &idx) const override;
   int rowCount(const QModelIndex &parent) const override;
   bool hasChildren(const QModelIndex &parent) const override;
-  bool canFetchMore(const QModelIndex &parent) const override;
-  void fetchMore(const QModelIndex &parent) override;
 
   T *IndexToItem(const QModelIndex &idx) const;
   QModelIndex ItemToIndex(T *item) const;
@@ -51,9 +49,6 @@ class SimpleTreeModel : public QAbstractItemModel {
   void BeginDelete(T *parent, int start, int end = -1);
   void EndDelete();
   void EmitDataChanged(T *item);
-
- protected:
-  virtual void LazyPopulate(T *item) { item->lazy_loaded = true; }
 
  protected:
   T *root_;
@@ -99,32 +94,13 @@ QModelIndex SimpleTreeModel<T>::parent(const QModelIndex &idx) const {
 template<typename T>
 int SimpleTreeModel<T>::rowCount(const QModelIndex &parent) const {
   T *item = IndexToItem(parent);
-  if (!item) return 0;
   return item->children.count();
 }
 
 template<typename T>
 bool SimpleTreeModel<T>::hasChildren(const QModelIndex &parent) const {
   T *item = IndexToItem(parent);
-  if (!item) return false;
-  if (item->lazy_loaded)
-    return !item->children.isEmpty();
-  else
-    return true;
-}
-
-template<typename T>
-bool SimpleTreeModel<T>::canFetchMore(const QModelIndex &parent) const {
-  T *item = IndexToItem(parent);
-  return item && !item->lazy_loaded;
-}
-
-template<typename T>
-void SimpleTreeModel<T>::fetchMore(const QModelIndex &parent) {
-  T *item = IndexToItem(parent);
-  if (item && !item->lazy_loaded) {
-    LazyPopulate(item);
-  }
+  return !item->children.isEmpty();
 }
 
 template<typename T>

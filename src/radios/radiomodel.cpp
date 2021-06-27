@@ -45,8 +45,6 @@ RadioModel::RadioModel(Application *app, QObject *parent)
     : SimpleTreeModel<RadioItem>(new RadioItem(this), parent),
       app_(app) {
 
-  root_->lazy_loaded = true;
-
   if (app_) {
     QObject::connect(&*app_->album_cover_loader(), &AlbumCoverLoader::AlbumCoverLoaded, this, &RadioModel::AlbumCoverLoaded);
   }
@@ -154,7 +152,6 @@ void RadioModel::Reset() {
   pending_cache_keys_.clear();
   delete root_;
   root_ = new RadioItem(this);
-  root_->lazy_loaded = true;
   endResetModel();
 
 }
@@ -172,7 +169,6 @@ void RadioModel::AddChannels(const RadioChannelList &channels) {
       item->source = channel.source;
       item->display_text = Song::DescriptionForSource(channel.source);
       item->sort_text = SortText(Song::TextForSource(channel.source));
-      item->lazy_loaded = true;
       container_nodes_.insert(channel.source, item);
       endInsertRows();
       container = item;
@@ -183,7 +179,6 @@ void RadioModel::AddChannels(const RadioChannelList &channels) {
     item->display_text = channel.name;
     item->sort_text = SortText(Song::TextForSource(channel.source) + " - " + channel.name);
     item->channel = channel;
-    item->lazy_loaded = true;
     items_ << item;
     endInsertRows();
   }

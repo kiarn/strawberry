@@ -95,7 +95,7 @@ void PlaylistManager::Init(SharedPtr<CollectionBackend> collection_backend, Shar
   parser_ = new PlaylistParser(collection_backend, this);
   playlist_container_ = playlist_container;
 
-  QObject::connect(&*collection_backend_, &CollectionBackend::SongsDiscovered, this, &PlaylistManager::SongsDiscovered);
+  QObject::connect(&*collection_backend_, &CollectionBackend::SongsAdded, this, &PlaylistManager::SongsDiscovered);
   QObject::connect(&*collection_backend_, &CollectionBackend::SongsStatisticsChanged, this, &PlaylistManager::SongsDiscovered);
   QObject::connect(&*collection_backend_, &CollectionBackend::SongsRatingChanged, this, &PlaylistManager::SongsDiscovered);
 
